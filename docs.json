@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Ressl",
-  "description": "Hosted mock SaaS providers for agent evaluation and automation.",
+  "description": "Hosted mock SaaS APIs for agents and evaluations.",
   "colors": {
     "primary": "#0F766E",
     "light": "#14B8A6",
@@ -16,7 +16,7 @@
         "groups": [
           {
             "group": "Get started",
-            "pages": ["index", "quickstart", "seed-and-config"]
+            "pages": ["index", "quickstart"]
           }
         ]
       },

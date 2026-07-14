@@ -1,14 +1,14 @@
 ---
 title: "List providers"
-description: "List provider slugs your organization is allowed to snapshot."
+description: "List mock SaaS provider slugs your organization can snapshot."
 api: "GET /providers/list"
 ---
 
-Returns the provider slugs granted to the API key’s organization.
+Returns the provider slugs granted to the API key’s organization. Use a slug from this list when creating a snapshot.
 
-## Request
+**Base URL:** `https://simulation.ressl.ai`
 
-No path or query parameters.
+## Headers
 
 <ParamField header="Authorization" type="string" required>
   `Bearer rsk_...` (or use `X-API-Key` instead).
@@ -17,14 +17,16 @@ No path or query parameters.
 ## Response
 
 <ResponseField name="providers" type="string[]" required>
-  Provider slugs available to your org, for example `["salesforce"]`.
+  Provider slugs available to your org (for example `jira`, `salesforce`, `slack`).
 </ResponseField>
 
 ```json
 {
-  "providers": ["salesforce"]
+  "providers": ["jira", "salesforce", "slack"]
 }
 ```
+
+Your array may be shorter or longer depending on grants.
 
 ## Example
 

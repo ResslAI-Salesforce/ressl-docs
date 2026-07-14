@@ -1,6 +1,9 @@
 # Ressl docs
 
-Public documentation for Ressl provider snapshots, built with [Mintlify](https://mintlify.com).
+Public documentation for Ressl hosted mock SaaS APIs, built with [Mintlify](https://mintlify.com).
+
+Control plane: `https://simulation.ressl.ai`  
+Mock hosts: `https://{snapshotId}.{slug}.mock.ressl.cc`
 
 ## Local preview
 
@@ -9,8 +12,10 @@ npm i -g mint
 mint dev
 ```
 
-Open http://localhost:3000.
+## Agent skill
 
-## Deploy
+Custom [`skill.md`](./skill.md) at the repo root overrides Mintlify’s auto-generated skill. After deploy it is available at `/skill.md` on the docs site.
 
-Push to `main`. Mintlify deploys from the connected GitHub repository.
+```bash
+npx skills add https://<your-docs-domain>
+```

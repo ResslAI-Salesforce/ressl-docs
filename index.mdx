@@ -1,31 +1,40 @@
 ---
-title: "Ressl provider snapshots"
-description: "Spin up hosted mock SaaS APIs (Salesforce and more) with a public HTTPS URL, seed data, and a TTL."
+title: "What Ressl is"
+description: "Hosted mock SaaS APIs your agents can call over HTTPS—no real customer tenants required."
 ---
 
-Ressl lets you create **provider snapshots** — short-lived, hosted copies of a mock SaaS API your organization has access to.
+Ressl gives you **fake but realistic SaaS APIs** (CRM, tickets, chat, IT tools, and more) that your agents and evals can call like the real thing.
 
-Each snapshot gets a public base URL such as:
+You pick a provider your org has access to, create a short-lived **snapshot**, and get a normal HTTPS base URL. Point your agent at that URL. When the time-to-live ends, the snapshot goes away.
 
-```text
-https://{snapshotId}.salesforce.mock.ressl.cc
-```
+## Two hosts
 
-Call that host like the real provider. When the TTL expires, the snapshot is torn down.
+| Role | Host |
+|------|------|
+| Console and control API | `https://simulation.ressl.ai` |
+| Mock API traffic | `https://{snapshotId}.{provider}.mock.ressl.cc` |
 
-## What you can do with the API
+Create and manage snapshots on **simulation.ressl.ai**. Call the mock itself on **\*.mock.ressl.cc**.
+
+## How it works
+
+1. Create an API key in the [console](https://simulation.ressl.ai) (Settings).
+2. Ask the API which providers your org can use.
+3. Create a snapshot for one provider (optional starting data + TTL).
+4. Use the returned `url` as the API base until it expires.
+
+## For people and agents
 
 <CardGroup cols={2}>
-  <Card title="List providers" icon="list" href="/api-reference/list-providers">
-    See which provider slugs your org can use (`salesforce`, …).
+  <Card title="Quickstart" icon="rocket" href="/quickstart">
+    API key → list providers → create a snapshot → call the mock URL.
   </Card>
-  <Card title="Create a snapshot" icon="server" href="/api-reference/create-snapshot">
-    Provision a hosted instance with optional `seed`, `config`, and `ttl`.
+  <Card title="API reference" icon="code" href="/api-reference/authentication">
+    Auth, list providers, and create-snapshot endpoints.
   </Card>
 </CardGroup>
 
-## Start here
-
-<Card title="Quickstart" icon="rocket" href="/quickstart">
-  Create an API key, list providers, and stand up your first snapshot in a few minutes.
-</Card>
+<Tip>
+  AI tools can load Ressl’s agent skill from this site’s `/skill.md`
+  (`npx skills add` with your docs URL).
+</Tip>

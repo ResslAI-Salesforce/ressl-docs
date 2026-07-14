@@ -3,7 +3,7 @@ title: "Authentication"
 description: "Authenticate platform API requests with an organization API key."
 ---
 
-All platform API endpoints require an organization API key.
+All control-plane endpoints on `https://simulation.ressl.ai` require an organization API key.
 
 ## Create a key
 
@@ -11,11 +11,9 @@ All platform API endpoints require an organization API key.
 2. Create an API key and copy the token immediately.
 3. Tokens use the prefix `rsk_` and are never shown again.
 
-Keys are scoped to the organization you are signed into. They only see providers granted to that org.
+Keys are scoped to the organization you are signed into. They can only use providers granted to that org.
 
 ## Send the key
-
-Use either header:
 
 <CodeGroup>
 ```bash Bearer
