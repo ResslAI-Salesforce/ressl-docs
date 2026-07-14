@@ -1,0 +1,242 @@
+---
+title: "Salesforce"
+description: "Hosted Salesforce REST mock: seed records, describe config, URLs, and copy-paste templates."
+---
+
+Spin up a short-lived **Salesforce REST** mock for agents and evals. One snapshot = one org-shaped sandbox until the TTL expires.
+
+## How it works
+
+1. Create a snapshot with `POST /providers/salesforce/create-snapshot` (API key required).
+2. Call the returned base URL like a Salesforce instance:
+
+   `https://{snapshotId}.salesforce.mock.ressl.cc`
+
+3. Paths follow normal Salesforce REST (v67.0 in examples below): sObjects, describe, SOQL `/query`, and so on.
+4. **Seed** loads initial records into memory. **Config** (optional) replaces describe metadata for this snapshot. Omit config to keep the emulator’s baked describes.
+
+When the TTL ends, the sandbox is torn down. There is no list/delete API in v1.
+
+See also: [Create snapshot](/api-reference/create-snapshot), [Quickstart](/quickstart).
+
+## Seed — records
+
+`seed` is the world state: which sObjects exist and which rows they contain.
+
+**Recommended shape:**
+
+```json
+{
+  "salesforce": {
+    "<SObjectApiName>": [
+      { "Id": "…", "Name": "…", "…": "…" }
+    ]
+  }
+}
+```
+
+| Rule | Behavior |
+|------|----------|
+| Omit `seed` or send `null` | Starts as `{ "salesforce": {} }` (empty) |
+| Omit the `salesforce` wrapper | API wraps your object using the path slug |
+| Collection keys | sObject API names: `Account`, `Contact`, custom `Foo__c`, … |
+| `Id` | Optional on create via REST; for seeded rows, set realistic Ids (e.g. `001…` for Account) |
+
+### Seed template
+
+```json
+{
+  "salesforce": {
+    "Account": [
+      {
+        "Id": "001xx000003DGbYAAW",
+        "Name": "Acme Manufacturing",
+        "BillingCity": "San Francisco",
+        "BillingState": "CA",
+        "BillingCountry": "USA"
+      }
+    ],
+    "Contact": [
+      {
+        "Id": "003xx000004TmiRAAS",
+        "AccountId": "001xx000003DGbYAAW",
+        "FirstName": "Ada",
+        "LastName": "Lovelace",
+        "Email": "ada@acme.example"
+      }
+    ]
+  }
+}
+```
+
+## Config — describe metadata
+
+`config` is Salesforce **describe** JSON — the same shape as the emulator’s baked `salesforce-describes.json`.
+
+| Rule | Behavior |
+|------|----------|
+| Omit / `null` | Keep baked describes (Account, Contact, User, Case, Opportunity, Quote, and several custom objects already in the image) |
+| Set | **Full replace** for this snapshot (not a merge) |
+| Shape | Object map keyed by sObject name, **or** an array of describe objects |
+| Other providers | `config` is only supported for `salesforce` (other slugs → `400`) |
+
+The handler uses uploaded describes when present for an sObject; otherwise it can fall back from seeded field shapes. You decide how rich `config` is; a minimal describe is enough for many evals.
+
+Typical describe fields the mock cares about: `name`, `label`, `keyPrefix`, and `fields[]` entries with at least `name`, `label`, `type` (plus `createable` / `updateable` when relevant).
+
+### Config template
+
+```json
+{
+  "Account": {
+    "name": "Account",
+    "label": "Account",
+    "keyPrefix": "001",
+    "fields": [
+      {
+        "name": "Id",
+        "label": "Account ID",
+        "type": "id",
+        "createable": false,
+        "updateable": false
+      },
+      {
+        "name": "Name",
+        "label": "Account Name",
+        "type": "string",
+        "createable": true,
+        "updateable": true
+      },
+      {
+        "name": "BillingCity",
+        "label": "Billing City",
+        "type": "string",
+        "createable": true,
+        "updateable": true
+      }
+    ]
+  },
+  "Contact": {
+    "name": "Contact",
+    "label": "Contact",
+    "keyPrefix": "003",
+    "fields": [
+      {
+        "name": "Id",
+        "label": "Contact ID",
+        "type": "id",
+        "createable": false,
+        "updateable": false
+      },
+      {
+        "name": "AccountId",
+        "label": "Account ID",
+        "type": "reference",
+        "createable": true,
+        "updateable": true,
+        "referenceTo": ["Account"]
+      },
+      {
+        "name": "FirstName",
+        "label": "First Name",
+        "type": "string",
+        "createable": true,
+        "updateable": true
+      },
+      {
+        "name": "LastName",
+        "label": "Last Name",
+        "type": "string",
+        "createable": true,
+        "updateable": true
+      },
+      {
+        "name": "Email",
+        "label": "Email",
+        "type": "email",
+        "createable": true,
+        "updateable": true
+      }
+    ]
+  }
+}
+```
+
+## Example
+
+Create a snapshot with the templates above:
+
+```bash
+curl -sS -X POST "https://simulation.ressl.ai/providers/salesforce/create-snapshot" \
+  -H "Authorization: Bearer rsk_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ttl": "1h",
+    "seed": {
+      "salesforce": {
+        "Account": [
+          {
+            "Id": "001xx000003DGbYAAW",
+            "Name": "Acme Manufacturing",
+            "BillingCity": "San Francisco"
+          }
+        ],
+        "Contact": [
+          {
+            "Id": "003xx000004TmiRAAS",
+            "AccountId": "001xx000003DGbYAAW",
+            "FirstName": "Ada",
+            "LastName": "Lovelace",
+            "Email": "ada@acme.example"
+          }
+        ]
+      }
+    },
+    "config": {
+      "Account": {
+        "name": "Account",
+        "label": "Account",
+        "keyPrefix": "001",
+        "fields": [
+          { "name": "Id", "label": "Account ID", "type": "id", "createable": false, "updateable": false },
+          { "name": "Name", "label": "Account Name", "type": "string", "createable": true, "updateable": true },
+          { "name": "BillingCity", "label": "Billing City", "type": "string", "createable": true, "updateable": true }
+        ]
+      },
+      "Contact": {
+        "name": "Contact",
+        "label": "Contact",
+        "keyPrefix": "003",
+        "fields": [
+          { "name": "Id", "label": "Contact ID", "type": "id", "createable": false, "updateable": false },
+          { "name": "AccountId", "label": "Account ID", "type": "reference", "createable": true, "updateable": true, "referenceTo": ["Account"] },
+          { "name": "FirstName", "label": "First Name", "type": "string", "createable": true, "updateable": true },
+          { "name": "LastName", "label": "Last Name", "type": "string", "createable": true, "updateable": true },
+          { "name": "Email", "label": "Email", "type": "email", "createable": true, "updateable": true }
+        ]
+      }
+    }
+  }'
+```
+
+Response includes `url`. Then:
+
+```bash
+SNAPSHOT_URL="https://snap_….salesforce.mock.ressl.cc"
+
+# Read a seeded Account
+curl -sS "$SNAPSHOT_URL/services/data/v67.0/sobjects/Account/001xx000003DGbYAAW"
+
+# Object describe (reflects your config if you sent one)
+curl -sS "$SNAPSHOT_URL/services/data/v67.0/sobjects/Account/describe"
+
+# SOQL
+curl -sS --get "$SNAPSHOT_URL/services/data/v67.0/query" \
+  --data-urlencode "q=SELECT Id, Name FROM Account"
+```
+
+## Notes
+
+- Snapshot URLs are **public but unguessable** until `expiresAt`.
+- Prefer seed-only when the baked schema is enough; add `config` when you need a custom or reduced describe surface.
+- For the generic create-snapshot contract (any provider), see [Create snapshot](/api-reference/create-snapshot).

@@ -80,7 +80,7 @@ Body (all optional):
 
 - `ttl`: `15m` / `6h` / `1d` style; default `6h`; max `7d`.
 - `seed`: initial data; prefer `{ "<slug>": { … } }`. Bare objects are auto-wrapped. Empty/default is `{ "<slug>": {} }`.
-- `config`: reserved; **not applied yet** — omit or `{}`.
+- `config`: provider overrides. For **salesforce**, describe JSON that **fully replaces** baked metadata; omit to keep baked. Other slugs reject `config` today. Details: docs site `/providers/salesforce`.
 
 Provisioning may take 1–2 minutes.
 
@@ -99,7 +99,7 @@ Use `url` as the HTTP base. Paths match that provider’s real API. Snapshot URL
 - One provider per snapshot (`EMULATOR_TOOLS` = single slug).
 - Org must be granted the slug (`403` otherwise).
 - No list/delete snapshot HTTP APIs in v1 — TTL tears the sandbox down.
-- Do not rely on `config` until docs say it is live.
+- Salesforce `config` replaces describes for that snapshot only; see `/providers/salesforce` on the docs site for seed/config templates.
 
 ## Agent tips
 

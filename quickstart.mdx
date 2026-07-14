@@ -72,7 +72,7 @@ Use **`url`** as the public base for your agent.
 |-------|---------|
 | `ttl` | How long the snapshot lives. Default `6h`. Forms: `15m`, `1h`, `1d`. Max `7d`. |
 | `seed` | Initial mock data for that provider. |
-| `config` | Reserved; accepted but not applied yet. Omit or send `{}`. |
+| `config` | Provider overrides. For Salesforce: describe JSON that replaces baked metadata. Omit to keep defaults. See [Salesforce](/providers/salesforce). |
 
 **Seed shape (recommended):** top-level key equals the provider slug; nested keys are that provider’s resource names:
 
@@ -90,7 +90,7 @@ Use **`url`** as the public base for your agent.
 
 If you omit the slug wrapper and send only the inner object, the API wraps it for you using `{slug}` from the path. If you omit `seed`, the snapshot starts empty: `{ "<slug>": {} }`.
 
-Exact fields inside each collection depend on the provider (ticket fields, CRM objects, channels, and so on).
+Exact fields inside each collection depend on the provider. For Salesforce seed and config templates, see [Salesforce](/providers/salesforce).
 
 ## 4. Call the mock API
 
@@ -109,6 +109,7 @@ Replace `$SNAPSHOT_URL` with the `url` from the create response.
 
 ## Next
 
+- [Salesforce](/providers/salesforce)
 - [Authentication](/api-reference/authentication)
 - [List providers](/api-reference/list-providers)
 - [Create snapshot](/api-reference/create-snapshot)
