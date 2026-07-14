@@ -1,2 +1,53 @@
-x
-
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Ressl",
+  "description": "Hosted mock SaaS providers for agent evaluation and automation.",
+  "colors": {
+    "primary": "#0F766E",
+    "light": "#14B8A6",
+    "dark": "#0D9488"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": ["index", "quickstart", "seed-and-config"]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "Platform API",
+            "pages": [
+              "api-reference/authentication",
+              "api-reference/list-providers",
+              "api-reference/create-snapshot"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "api": {
+    "baseUrl": "https://simulation.ressl.ai"
+  },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Console",
+      "href": "https://simulation.ressl.ai"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/ResslAI-Salesforce"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+---
+title: "Authentication"
+description: "Authenticate platform API requests with an organization API key."
+---
+
+All platform API endpoints require an organization API key.
+
+## Create a key
+
+1. Open [simulation.ressl.ai](https://simulation.ressl.ai) → **Settings**.
+2. Create an API key and copy the token immediately.
+3. Tokens use the prefix `rsk_` and are never shown again.
+
+Keys are scoped to the organization you are signed into. They only see providers granted to that org.
+
+## Send the key
+
+Use either header:
+
+<CodeGroup>
+```bash Bearer
+curl https://simulation.ressl.ai/providers/list \
+  -H "Authorization: Bearer rsk_..."
+```
+
+```bash X-API-Key
+curl https://simulation.ressl.ai/providers/list \
+  -H "X-API-Key: rsk_..."
+```
+</CodeGroup>
+
+## Errors
+
+| Status | Meaning |
+|--------|---------|
+| `401` | Missing, malformed, or revoked key |
+
+```json
+{ "error": "Unauthorized" }
+```

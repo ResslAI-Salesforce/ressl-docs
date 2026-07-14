@@ -1,0 +1,110 @@
+---
+title: "Create snapshot"
+description: "Provision a hosted single-provider mock with optional seed, config, and TTL."
+api: "POST /providers/{slug}/create-snapshot"
+---
+
+Creates a hosted snapshot of one provider. The response includes a public vanity URL you can call until the TTL expires.
+
+Provisioning may take up to a few minutes.
+
+## Path parameters
+
+<ParamField path="slug" type="string" required>
+  Provider slug from [`GET /providers/list`](/api-reference/list-providers), for example `salesforce`.
+</ParamField>
+
+## Headers
+
+<ParamField header="Authorization" type="string" required>
+  `Bearer rsk_...` (or use `X-API-Key` instead).
+</ParamField>
+
+<ParamField header="Content-Type" type="string">
+  `application/json` when sending a body.
+</ParamField>
+
+## Body
+
+All fields are optional. An empty body uses defaults (`ttl: "6h"`, empty seed).
+
+<ParamField body="ttl" type="string" default="6h">
+  Lifetime of the snapshot. Forms like `15m`, `6h`, or `1d`. Maximum `7d`.
+</ParamField>
+
+<ParamField body="seed" type="object">
+  Initial mock data. Prefer `{ "<slug>": { … } }`. If the top-level slug key is missing, the API wraps the object for you. See [Seed and config](/seed-and-config).
+</ParamField>
+
+<ParamField body="config" type="object">
+  Reserved for emulator overrides. Accepted but not applied yet. Safe to send `{}` or omit.
+</ParamField>
+
+## Response
+
+<ResponseField name="snapshotId" type="string" required>
+  Snapshot id. Also the subdomain label on the vanity URL.
+</ResponseField>
+
+<ResponseField name="slug" type="string" required>
+  Provider slug that was provisioned.
+</ResponseField>
+
+<ResponseField name="url" type="string" required>
+  Public base URL, for example `https://snap_….salesforce.mock.ressl.ai`. Use this as the API host.
+</ResponseField>
+
+<ResponseField name="previewUrl" type="string" required>
+  Direct Blaxel preview URL. Prefer `url` for clients.
+</ResponseField>
+
+<ResponseField name="expiresAt" type="string" required>
+  ISO-8601 expiry time derived from `ttl`.
+</ResponseField>
+
+<ResponseField name="ttl" type="string" required>
+  Normalized TTL string that was applied.
+</ResponseField>
+
+```json
+{
+  "snapshotId": "snap_a1b2c3d4e5f6789012345678",
+  "slug": "salesforce",
+  "url": "https://snap_a1b2c3d4e5f6789012345678.salesforce.mock.ressl.ai",
+  "previewUrl": "https://….preview.bl.run",
+  "expiresAt": "2026-07-14T12:00:00.000Z",
+  "ttl": "1h"
+}
+```
+
+## Example
+
+```bash
+curl -sS -X POST https://simulation.ressl.ai/providers/salesforce/create-snapshot \
+  -H "Authorization: Bearer rsk_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ttl": "1h",
+    "seed": {
+      "salesforce": {
+        "Account": [
+          { "Id": "001ACCOUNT000001", "Name": "Acme Corp" }
+        ]
+      }
+    },
+    "config": {}
+  }'
+```
+
+## Errors
+
+| Status | Meaning |
+|--------|---------|
+| `400` | Invalid slug, body, or `ttl` |
+| `401` | Invalid or missing API key |
+| `403` | Org is not granted that provider |
+| `502` | Provisioning failed (sandbox/emulator error) |
+
+```json
+{ "error": "Your organization does not have access to that provider." }
+```

@@ -1,0 +1,31 @@
+---
+title: "Ressl provider snapshots"
+description: "Spin up hosted mock SaaS APIs (Salesforce and more) with a public HTTPS URL, seed data, and a TTL."
+---
+
+Ressl lets you create **provider snapshots** — short-lived, hosted copies of a mock SaaS API your organization has access to.
+
+Each snapshot gets a public base URL such as:
+
+```text
+https://{snapshotId}.salesforce.mock.ressl.ai
+```
+
+Call that host like the real provider. When the TTL expires, the snapshot is torn down.
+
+## What you can do with the API
+
+<CardGroup cols={2}>
+  <Card title="List providers" icon="list" href="/api-reference/list-providers">
+    See which provider slugs your org can use (`salesforce`, …).
+  </Card>
+  <Card title="Create a snapshot" icon="server" href="/api-reference/create-snapshot">
+    Provision a hosted instance with optional `seed`, `config`, and `ttl`.
+  </Card>
+</CardGroup>
+
+## Start here
+
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  Create an API key, list providers, and stand up your first snapshot in a few minutes.
+</Card>

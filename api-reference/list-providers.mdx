@@ -1,0 +1,40 @@
+---
+title: "List providers"
+description: "List provider slugs your organization is allowed to snapshot."
+api: "GET /providers/list"
+---
+
+Returns the provider slugs granted to the API key’s organization.
+
+## Request
+
+No path or query parameters.
+
+<ParamField header="Authorization" type="string" required>
+  `Bearer rsk_...` (or use `X-API-Key` instead).
+</ParamField>
+
+## Response
+
+<ResponseField name="providers" type="string[]" required>
+  Provider slugs available to your org, for example `["salesforce"]`.
+</ResponseField>
+
+```json
+{
+  "providers": ["salesforce"]
+}
+```
+
+## Example
+
+```bash
+curl -sS https://simulation.ressl.ai/providers/list \
+  -H "Authorization: Bearer rsk_..."
+```
+
+## Errors
+
+| Status | Meaning |
+|--------|---------|
+| `401` | Invalid or missing API key |

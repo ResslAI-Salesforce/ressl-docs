@@ -1,0 +1,99 @@
+---
+title: "Quickstart"
+description: "Create an API key, list available providers, and provision a hosted snapshot with seed data."
+---
+
+This guide walks through creating a provider snapshot from the platform API at `https://simulation.ressl.ai`.
+
+## Prerequisites
+
+- A Ressl organization with at least one provider grant (for example Salesforce)
+- Access to the [console](https://simulation.ressl.ai) to create an API key
+
+## 1. Create an API key
+
+1. Sign in at [simulation.ressl.ai](https://simulation.ressl.ai).
+2. Open **Settings** (avatar menu).
+3. Under **API keys**, create a key and copy the token once. It starts with `rsk_` and is shown only at creation time.
+
+Pass the key on every request:
+
+```bash
+Authorization: Bearer rsk_...
+```
+
+You can also use `X-API-Key: rsk_...`.
+
+## 2. List providers you can use
+
+```bash
+curl -sS https://simulation.ressl.ai/providers/list \
+  -H "Authorization: Bearer rsk_..."
+```
+
+Example response:
+
+```json
+{
+  "providers": ["salesforce"]
+}
+```
+
+Only slugs granted to your organization appear here. Use one of these values as `{slug}` when creating a snapshot.
+
+## 3. Create a snapshot
+
+```bash
+curl -sS -X POST https://simulation.ressl.ai/providers/salesforce/create-snapshot \
+  -H "Authorization: Bearer rsk_..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "ttl": "1h",
+    "seed": {
+      "salesforce": {
+        "Account": [
+          {
+            "Id": "001ACCOUNT000001",
+            "Name": "Acme Corp",
+            "Industry": "Technology"
+          }
+        ]
+      }
+    },
+    "config": {}
+  }'
+```
+
+Provisioning can take a minute or two (sandbox boot + emulator image pull).
+
+Example response:
+
+```json
+{
+  "snapshotId": "snap_a1b2c3d4e5f6789012345678",
+  "slug": "salesforce",
+  "url": "https://snap_a1b2c3d4e5f6789012345678.salesforce.mock.ressl.ai",
+  "previewUrl": "https://….preview.bl.run",
+  "expiresAt": "2026-07-14T12:00:00.000Z",
+  "ttl": "1h"
+}
+```
+
+Use `url` as the public base for your agent or integration. Prefer it over `previewUrl`.
+
+## 4. Call the mock API
+
+Point your client at the vanity host. Paths match the real provider (for Salesforce, under `/services/data/...`).
+
+```bash
+curl -sS "https://snap_a1b2c3d4e5f6789012345678.salesforce.mock.ressl.ai/services/data/v67.0/sobjects/Account/001ACCOUNT000001"
+```
+
+<Note>
+  Snapshot URLs are public but unguessable. Anyone with the full URL can call the mock until it expires.
+</Note>
+
+## Next
+
+- [Seed and config](/seed-and-config) — shape of `seed` and `config`
+- [Create snapshot API](/api-reference/create-snapshot) — full request and response fields
