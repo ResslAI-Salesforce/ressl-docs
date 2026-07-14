@@ -1,28 +1,12 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "willow",
+  "theme": "mint",
   "name": "Ressl",
   "description": "Hosted mock SaaS APIs for agents and evaluations.",
   "colors": {
     "primary": "#171717",
     "light": "#404040",
     "dark": "#FAFAFA"
-  },
-  "fonts": {
-    "heading": {
-      "family": "Geist",
-      "weight": 600
-    },
-    "body": {
-      "family": "Geist",
-      "weight": 400
-    }
-  },
-  "appearance": {
-    "default": "dark"
-  },
-  "styling": {
-    "codeblocks": "system"
   },
   "favicon": "/logo/icon-dark.png",
   "logo": {
