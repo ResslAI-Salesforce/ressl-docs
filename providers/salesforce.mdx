@@ -14,6 +14,7 @@ Spin up a short-lived **Salesforce REST** mock for agents and evals. One snapsho
 
 3. Paths follow normal Salesforce REST (v67.0 in examples below): sObjects, describe, SOQL `/query`, and so on.
 4. **Seed** loads initial records into memory. **Config** (optional) replaces describe metadata for this snapshot. Omit config to keep the emulator’s baked describes.
+5. **`GET /openapi`** on the snapshot base URL returns this provider’s OpenAPI document (single-provider snapshots only).
 
 When the TTL ends, the sandbox is torn down. There is no list/delete API in v1.
 
@@ -229,6 +230,9 @@ curl -sS "$SNAPSHOT_URL/services/data/v67.0/sobjects/Account/001xx000003DGbYAAW"
 
 # Object describe (reflects your config if you sent one)
 curl -sS "$SNAPSHOT_URL/services/data/v67.0/sobjects/Account/describe"
+
+# OpenAPI (single-provider snapshots)
+curl -sS "$SNAPSHOT_URL/openapi" | head -c 200
 
 # SOQL
 curl -sS --get "$SNAPSHOT_URL/services/data/v67.0/query" \
