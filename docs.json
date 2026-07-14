@@ -8,14 +8,19 @@
     "light": "#14B8A6",
     "dark": "#0D9488"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/logo/icon-dark.png",
+  "logo": {
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png",
+    "href": "https://simulation.ressl.ai"
+  },
   "navigation": {
     "tabs": [
       {
         "tab": "Guides",
         "groups": [
           {
-            "group": "Get started",
+            "group": "Get Started",
             "pages": ["index", "quickstart"]
           }
         ]
