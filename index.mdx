@@ -3,8 +3,6 @@ title: "Get Started"
 description: "Hosted mock SaaS APIs your agents can call over HTTPS—no real customer tenants required."
 ---
 
-import { CopySkill } from "/snippets/copy-skill.jsx"
-
 Ressl gives you **fake but realistic SaaS APIs** (CRM, tickets, chat, IT tools, and more) that your agents and evals can call like the real thing.
 
 You pick a provider your org has access to, create a short-lived **snapshot**, and get a normal HTTPS base URL. Point your agent at that URL. When the time-to-live ends, the snapshot goes away.
@@ -39,8 +37,6 @@ Create and manage snapshots on **simulation.ressl.ai**. Call the mock itself on 
   </Card>
 </CardGroup>
 
-## Agent skill
-
-AI tools can load Ressl’s agent skill from this site (`npx skills add` with your docs URL), or copy it below.
-
-<CopySkill />
+<Tip>
+  Use **Copy skill** in the top bar (left of Console) to copy the agent skill, or load it from [`/skill.md`](/skill.md) (`npx skills add` with your docs URL).
+</Tip>
