@@ -82,11 +82,11 @@ Body (all optional):
 - `seed`: initial data; prefer `{ "<slug>": { … } }`. Bare objects are auto-wrapped. Empty/default is `{ "<slug>": {} }`.
 - `config`: reserved; **not applied yet** — omit or `{}`.
 
-Provisioning may take 1–2 minutes. Prefer response field `url` over `previewUrl`.
+Provisioning may take 1–2 minutes.
 
 Success includes:
 
-- `snapshotId`, `slug`, `url`, `previewUrl`, `expiresAt`, `ttl`
+- `snapshotId`, `slug`, `url`, `expiresAt`, `ttl`
 
 Errors: `400` bad input, `403` no grant, `502` provision failure.
 
