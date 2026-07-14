@@ -5,8 +5,8 @@
   "description": "Hosted mock SaaS APIs for agents and evaluations.",
   "colors": {
     "primary": "#171717",
-    "light": "#404040",
-    "dark": "#FAFAFA"
+    "light": "#A3A3A3",
+    "dark": "#171717"
   },
   "favicon": "/logo/icon-dark.png",
   "logo": {
