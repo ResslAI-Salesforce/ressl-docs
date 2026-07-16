@@ -1,0 +1,73 @@
+---
+title: "LinkedIn UI clone"
+description: "Launch a short-lived LinkedIn browser UI with deterministic built-in data."
+---
+
+Ressl UI clones are interactive browser applications rather than REST API mocks. A snapshot launches an isolated copy of the application and returns a public URL that works until its TTL expires.
+
+LinkedIn is the first documented UI clone. It provides a realistic interface for browser agents and evaluations without connecting to the real LinkedIn service.
+
+## What is included
+
+The LinkedIn clone includes deterministic built-in data and supports common browser workflows:
+
+- Browse and react to feed posts
+- Manage connections
+- Search and save jobs
+- Read and send messages
+- Review notifications
+
+Actions persist in the browser's local storage for that snapshot URL. Different browser profiles do not share those local changes.
+
+## Create from the console
+
+1. Open [Providers](https://simulation.ressl.ai/providers) in the Ressl console.
+2. Find **LinkedIn**.
+3. Select a TTL and click **Create snapshot**.
+4. Open the returned URL in a browser or browser agent.
+
+LinkedIn is currently granted only to the **Polar Browser** organization. Users in other organizations will not see it and receive `403` from the API.
+
+## Create with the API
+
+```bash
+curl -sS -X POST "https://simulation.ressl.ai/providers/linkedin/create-snapshot" \
+  -H "Authorization: Bearer rsk_..." \
+  -H "Content-Type: application/json" \
+  -d '{ "ttl": "6h" }'
+```
+
+Example response:
+
+```json
+{
+  "snapshotId": "snap_a1b2c3d4e5f6789012345678",
+  "slug": "linkedin",
+  "url": "https://snap_a1b2c3d4e5f6789012345678.linkedin.mock.ressl.cc",
+  "expiresAt": "2026-07-16T15:27:12.423Z",
+  "ttl": "6h"
+}
+```
+
+Open `url` as a web page. It is not an API base URL.
+
+## Data and configuration
+
+<Warning>
+  Custom `seed` and `config` are not supported for UI clones yet. If supplied, both fields are ignored and LinkedIn starts with its built-in deterministic data.
+</Warning>
+
+Each new snapshot starts from the same built-in state. Browser actions then persist locally for that snapshot URL.
+
+## Snapshot lifecycle
+
+| Property | Behavior |
+|----------|----------|
+| Default TTL | `6h` |
+| Maximum TTL | `7d` |
+| URL access | Public but unguessable |
+| Data source | Built-in deterministic data |
+| Browser mutations | Stored in browser local storage |
+| Expiration | The hosted sandbox is removed when its TTL ends |
+
+See [Create snapshot](/api-reference/create-snapshot) for the complete request and error contract.

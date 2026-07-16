@@ -4,7 +4,7 @@ description: "Provision a hosted mock SaaS API for one provider with optional se
 api: "POST /providers/{slug}/create-snapshot"
 ---
 
-Creates a hosted snapshot of **one** mock provider. The response includes a public base URL you can call until the TTL expires.
+Creates a hosted snapshot of **one** provider. API providers return a mock API base URL; UI providers return a browser application URL. Both remain available until the TTL expires.
 
 **Base URL:** `https://simulation.ressl.ai`  
 **Mock URL shape:** `https://{snapshotId}.{slug}.mock.ressl.cc`
@@ -36,11 +36,11 @@ All fields are optional. An empty body uses defaults (`ttl: "6h"`, empty seed).
 </ParamField>
 
 <ParamField body="seed" type="object">
-  Initial mock data. Recommended shape: `{ "<slug>": { "<Resource>": [ … ] } }`. If the top-level slug key is missing, the API wraps the object using the path `slug`. Omit or `null` for `{ "<slug>": {} }`. For Salesforce sObject shapes, see [Salesforce](/providers/salesforce).
+  Initial mock data for API providers. Recommended shape: `{ "<slug>": { "<Resource>": [ … ] } }`. If the top-level slug key is missing, the API wraps the object using the path `slug`. Omit or `null` for `{ "<slug>": {} }`. UI providers ignore this field and use built-in data. For details, see [Salesforce](/providers/salesforce) or [LinkedIn UI clone](/providers/linkedin).
 </ParamField>
 
 <ParamField body="config" type="object">
-  Provider-specific emulator overrides. For **salesforce**, this is describe JSON that **fully replaces** baked metadata for the snapshot. Omit to keep baked describes. Other providers reject `config` with `400` today. See [Salesforce](/providers/salesforce).
+  Provider-specific emulator overrides. For **salesforce**, this is describe JSON that **fully replaces** baked metadata for the snapshot. Omit to keep baked describes. UI providers ignore this field. See [Salesforce](/providers/salesforce).
 </ParamField>
 
 ## Response
@@ -54,7 +54,7 @@ All fields are optional. An empty body uses defaults (`ttl: "6h"`, empty seed).
 </ResponseField>
 
 <ResponseField name="url" type="string" required>
-  Public mock base URL. Use this as the API host for agents and clients.
+  Public snapshot URL. Use it as an API base URL for API providers or open it in a browser for UI providers.
 </ResponseField>
 
 <ResponseField name="expiresAt" type="string" required>
