@@ -1,7 +1,7 @@
 ---
 title: "Create snapshot"
 description: "Provision a hosted mock SaaS API for one provider with optional seed and TTL."
-api: "POST /providers/{slug}/create-snapshot"
+api: "POST https://simulation.ressl.ai/providers/{slug}/create-snapshot"
 ---
 
 Creates a hosted snapshot of **one** provider. API providers return a mock API base URL; UI providers return a browser application URL. Both remain available until the TTL expires.
