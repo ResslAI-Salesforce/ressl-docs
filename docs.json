@@ -25,7 +25,11 @@
           },
           {
             "group": "Providers",
-            "pages": ["providers/salesforce", "providers/linkedin"]
+            "pages": [
+              "providers/salesforce",
+              "providers/linkedin",
+              "providers/gmail-business"
+            ]
           }
         ]
       },

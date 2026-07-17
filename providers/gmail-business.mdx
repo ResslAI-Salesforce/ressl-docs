@@ -1,0 +1,81 @@
+---
+title: "Gmail Business"
+description: "Launch a short-lived Gmail-style business inbox with synthetic built-in data."
+---
+
+Gmail Business is an interactive browser application for browser agents and evaluations. Each snapshot launches an isolated inbox and returns a public URL that works until its TTL expires.
+
+The clone uses synthetic data and does not connect to a real Google account, Gmail mailbox, or email delivery service.
+
+## What is included
+
+Gmail Business supports common inbox workflows:
+
+- Browse the inbox, categories, and labels
+- Search for messages and conversations
+- Read, star, archive, and organize threads
+- Compose, reply to, and forward messages
+- Create, edit, send, and delete drafts
+- Create and apply labels and filters
+- Use the built-in assistant for mailbox questions and writing suggestions
+
+Actions change only the isolated snapshot. Sending a message updates the clone; it does not deliver email to a real recipient.
+
+## Create from the console
+
+1. Open [Providers](https://simulation.ressl.ai/providers) in the Ressl console.
+2. Find **Gmail Business**.
+3. Select a TTL and click **Create snapshot**.
+4. Open the returned URL in a browser or browser agent.
+5. Submit the prefilled demo sign-in form to open the mailbox.
+
+## Create with the API
+
+Use the provider slug `gmail-business`:
+
+```bash
+curl -sS -X POST "https://simulation.ressl.ai/providers/gmail-business/create-snapshot" \
+  -H "Authorization: Bearer rsk_..." \
+  -H "Content-Type: application/json" \
+  -d '{ "ttl": "6h" }'
+```
+
+Example response:
+
+```json
+{
+  "snapshotId": "snap_a1b2c3d4e5f6789012345678",
+  "slug": "gmail-business",
+  "url": "https://snap_a1b2c3d4e5f6789012345678.gmail-business.mock.ressl.cc",
+  "expiresAt": "2026-07-17T18:00:00.000Z",
+  "ttl": "6h"
+}
+```
+
+Open `url` as a web application. Provisioning may take a few minutes.
+
+## Data and configuration
+
+<Warning>
+  Custom `seed` and `config` are not supported for UI clones yet. If supplied, both fields are ignored and Gmail Business starts with its built-in synthetic data.
+</Warning>
+
+Each new snapshot starts from the same initial mailbox. Mailbox changes persist for that snapshot's lifetime and are shared by anyone using the same snapshot URL and demo account.
+
+<Warning>
+  Snapshot URLs are public but unguessable. Do not enter personal, confidential, or production data into the mailbox, sign-in form, or assistant.
+</Warning>
+
+## Snapshot lifecycle
+
+| Property | Behavior |
+|----------|----------|
+| Default TTL | `6h` |
+| Maximum TTL | `7d` |
+| URL access | Public but unguessable |
+| Sign-in | Prefilled demo account |
+| Data source | Built-in synthetic mailbox |
+| Mailbox mutations | Isolated to and shared within one snapshot |
+| Expiration | The hosted sandbox and its state are removed when the TTL ends |
+
+See [Create snapshot](/api-reference/create-snapshot) for the complete request and error contract.
