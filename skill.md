@@ -78,7 +78,7 @@ Body (all optional):
 }
 ```
 
-- `ttl`: `15m` / `6h` / `1d` style; default `6h`; max `7d`.
+- `ttl`: `15m` / `1h` / `1d` style; default `1h`; max `7d`.
 - `seed`: initial data; prefer `{ "<slug>": { … } }`. Bare objects are auto-wrapped. Empty/default is `{ "<slug>": {} }`.
 - `config`: provider overrides. For **salesforce**, describe JSON that **fully replaces** baked metadata; omit to keep baked. Other slugs reject `config` today. Details: docs site `/providers/salesforce`.
 
